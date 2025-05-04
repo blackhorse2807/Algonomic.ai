@@ -105,7 +105,7 @@ export default function App() {
         const formData = new FormData();
         formData.append("file", file);
         try {
-          const res = await fetch("http://34.192.150.36/api/v1/uploadFile", {
+          const res = await fetch("https://34.192.150.36/api/v1/uploadFile", {
             method: "POST",
             body: formData,
           });
@@ -384,19 +384,21 @@ export default function App() {
       {/* Icon below the box, bottom center of the screen */}
       {(phase === "border" || phase === "image") && (
         <div
-    style={{
-      position: "fixed",
-      left: "50%",
-      bottom: "15%",
-      transform: "translateX(-50%)",
-      zIndex: 20,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      gap: iconSplit ? "80px" : "0px", // Add gap when icons split
-      transition: "gap 0.6s ease-out", // Smooth transition for the gap
-    }}
-  >
+        className="icon-container"
+        style={{
+          position: "fixed",
+          left: "50%",
+          bottom: "15%", // Default position for larger screens
+          transform: "translateX(-50%)",
+          zIndex: 20,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: iconSplit ? "80px" : "20px", // Adjust gap dynamically
+          transition: "gap 0.6s ease-out", // Smooth transition for the gap,
+          width: "100%"
+        }}
+      >
     <motion.div
       initial={{ x: 0, opacity: 1 }}
       animate={iconSplit ? { x: -40, opacity: 1 } : { x: 0, opacity: 1 }}
