@@ -105,7 +105,7 @@ export default function App() {
         const formData = new FormData();
         formData.append("file", file);
         try {
-          const res = await fetch("https://34.192.150.36/api/v1/uploadFile", {
+          const res = await fetch("http://34.192.150.36/api/v1/uploadFile", {
             method: "POST",
             body: formData,
           });
