@@ -50,21 +50,21 @@ export default function App() {
 
   useEffect(() => {
     if (phase === "text") {
-      const timer = setTimeout(() => setPhase("animation"), 2200);
+      const timer = setTimeout(() => setPhase("animation"), 2000);
       return () => clearTimeout(timer);
     }
     if (phase === "animation") {
       const timer = setTimeout(() => {
         setShowBorder(true);
         setPhase("border");
-      }, 1200);
+      }, 2000);
       return () => clearTimeout(timer);
     }
     if (phase === "border") {
       const timer = setTimeout(() => {
         setShowImage(true);
         setPhase("image");
-      }, 1200);
+      }, 2000);
       return () => clearTimeout(timer);
     }
   }, [phase]);
@@ -78,7 +78,7 @@ export default function App() {
       setShowSplash(false);
         setStep(2);
       }, 500);
-    }, 2500);
+    }, 1000);
     return () => clearTimeout(timer);
   };
 
@@ -87,7 +87,7 @@ export default function App() {
     // Show splash screen after morph transition
     setShowSplash(true);
     // Hide splash after 2 seconds
-    const timer = setTimeout(() => setShowSplash(false), 1000);
+    const timer = setTimeout(() => setShowSplash(false), 2000);
     return () => clearTimeout(timer);
   };
 
@@ -227,13 +227,13 @@ export default function App() {
           <MdLogout size= "1.5rem" />
         </button>
       </div>
-      <AnimatePresence mode="wait">
+      <AnimatePresence mode="wait" >
         {(phase === "text" || phase === "animation") && (
           <motion.div
             key={phase}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            exit={{ opacity: 0 , scale: 0.95}}
             transition={{ duration: 1.0, ease: "easeInOut" }}
             className="absolute inset-0"
             style={{
@@ -248,32 +248,35 @@ export default function App() {
             {phase === "text" ? (
               <AnimatedTypography onComplete={handleTypographyComplete} />
             ) : (
-              <div
-                style={{
-                  position: "absolute",
-                  top: "40%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  width: 340,
-                  height: 340,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  zIndex: 2,
-                }}
-              >
-                <div
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center"
-                  }}
-                >
+              <motion.div
+          initial={{ opacity: 0, scale: 0.9 }} // Start slightly smaller and transparent
+          animate={{ opacity: 0, scale: 1 }} // Smoothly scale up and fade in
+          transition={{ duration: 1.0, ease: "easeInOut", delay: 3.0 }} // Add delay for smoother transition
+          style={{
+            position: "absolute",
+            top: "40%",
+            left: "50%",
+            transform: "translate(-100%, -100%)",
+            width: 340,
+            height: 340,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 2,
+          }}
+        >
+          <div
+            style={{
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
                   <ConceptAnimation boxed style={{ width: "100%", height: "100%" }} />
                 </div>
-              </div>
+              </motion.div>
             )}
           </motion.div>
         )}
@@ -304,7 +307,7 @@ export default function App() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 1.2, ease: "linear" }}
+                transition={{ duration: 1.0, ease: "linear" }}
                 style={{
                   position: "absolute",
                   width: boxSize,
