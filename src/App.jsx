@@ -101,29 +101,25 @@ export default function App() {
       if (file) {
         setLoading(true);
         setMagentaGlow(false);
-        // Upload to API
         const formData = new FormData();
         formData.append("file", file);
         try {
-          const res = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/uploadFile`, {
+          const res = await fetch("https://algonomic-ai-1.onrender.com/api/v1/uploadFile", {
             method: "POST",
             body: formData,
           });
-          
+  
           if (!res.ok) {
             const errorData = await res.json();
             throw new Error(errorData.error || 'Upload failed');
           }
-
+  
           const data = await res.json();
-
-          const base64Image = `data:image/jpeg;base64,${btoa(
-            data.contents.data
-              .map((byte) => String.fromCharCode(byte))
-              .join("")
-          )}`;
+  
+          // Use croppedImage directly
+          const base64Image = data.croppedImage;
           console.log("Base64 Image:", base64Image);
-          
+  
           setFileId(data.fileId);
           setImage(base64Image);
           setTimeout(() => setMagentaGlow(true), 300);
@@ -136,6 +132,7 @@ export default function App() {
     };
     input.click();
   };
+  
 
   // Handle icon click (first time cue)
   const handleIconClick = () => {
