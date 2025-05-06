@@ -433,7 +433,7 @@ export default function App() {
       onClick={handleIconClick}
     >
       <img
-        src="/images/Frame 6.png "
+        src="/images/icon.png "
         alt="icon"
         style={{ width: 52, height: 52, display: "block", borderRadius: "0%", margin: 0, padding: 0, lineHeight: 0 }}
       />
