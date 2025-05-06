@@ -14,14 +14,13 @@ function AnimatedTypography({ onComplete }) {
   return (
     <motion.div 
       style={{
-        minHeight: "100vh",
-        width: "100vw",
+        height: "60vh",
+        width: "60vw",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: "flex-start",
-        background: "linear-gradient(to bottom, #fff 50%, #7eefff 100%)",
-        paddingTop: "80px",
+        justifyContent: "center",
+        // background: "linear-gradient(to bottom, #fff 50%, #7eefff 100%)",
         boxSizing: "border-box",
       }}
       initial={{ opacity: 0 }}
@@ -34,10 +33,12 @@ function AnimatedTypography({ onComplete }) {
           color: "#a17ee4",
           fontFamily: "'Montserrat', 'Arial', sans-serif",
           fontWeight: 200,
-          fontSize: "2.2rem",
+          fontSize: "clamp(2rem, 5vw, 5rem)",
           letterSpacing: "1px",
           textAlign: "center",
           lineHeight: 1.2,
+          margin: 0,
+          padding: 0,
         }}
         initial={{ y: 30, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -47,9 +48,7 @@ function AnimatedTypography({ onComplete }) {
           ease: "easeOut"
         }}
       >
-        style<br />
-        your<br />
-        picture!
+        style your images
       </motion.div>
     </motion.div>
   );
