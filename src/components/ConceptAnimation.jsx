@@ -90,7 +90,7 @@ export default function HexagonParticlesDesktop({ boxed = false, style = {}, cla
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "white",
+          // background: "white",
           boxShadow: "0 2px 24px 0 rgba(50, 80, 120, 0.08)",
           borderRadius: 0,
           ...style
