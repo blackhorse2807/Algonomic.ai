@@ -305,7 +305,7 @@ export default function App() {
           style={{
             position: "absolute",
             top: "40%",
-            left: "47%",
+            left: "49%",
             transform: "translate(-50%, -50%)",
             width: boxSize,
             height: boxSize,
