@@ -305,7 +305,7 @@ export default function App() {
           style={{
             position: "absolute",
             top: "40%",
-            left: "49%",
+            left: "50%",
             transform: "translate(-50%, -50%)",
             width: boxSize,
             height: boxSize,
@@ -404,7 +404,7 @@ export default function App() {
         className="icon-container"
         style={{
           position: "fixed",
-          left: window.innerWidth >= 1024 ? "50%" : "53%",
+          left: window.innerWidth >= 1024 ? "50%" : "55%",
           // left: "53%",
           bottom: "15%",
           transform: "translateX(-50%)",
