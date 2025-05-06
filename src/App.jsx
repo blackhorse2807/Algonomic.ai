@@ -29,7 +29,6 @@ export default function App() {
   const platform = usePlatform();
   const [showSplash, setShowSplash] = useState(false);
   const [showImageBox, setShowImageBox] = useState(false);
-  const [backgroundGradient, setBackgroundGradient] = useState("from-white to-cyan-200");
   const [showBorder, setShowBorder] = useState(false);
   const [showImage, setShowImage] = useState(false);
   const [iconSplit, setIconSplit] = useState(false);
@@ -44,29 +43,16 @@ export default function App() {
       setPhase("text");
       setShowBorder(false);
       setShowImage(false);
-      // Reset any other onboarding state if needed
     }
   }, [user]);
 
+  // Phase progression with timers
   useEffect(() => {
-    if (phase === "text") {
-      const timer = setTimeout(() => setPhase("animation"), 2000);
-      return () => clearTimeout(timer);
-    }
-    if (phase === "animation") {
-      const timer = setTimeout(() => {
-        setShowBorder(true);
-        setPhase("border");
-      }, 2000);
-      return () => clearTimeout(timer);
-    }
-    if (phase === "border") {
-      const timer = setTimeout(() => {
-        setShowImage(true);
-        setPhase("image");
-      }, 2000);
-      return () => clearTimeout(timer);
-    }
+    let timer;
+    if (phase === "text") timer = setTimeout(() => setPhase("animation"), 2000);
+    else if (phase === "animation") timer = setTimeout(() => { setShowBorder(true); setPhase("border"); }, 2000);
+    else if (phase === "border") timer = setTimeout(() => { setShowImage(true); setPhase("image"); }, 2000);
+    return () => clearTimeout(timer);
   }, [phase]);
 
   const handleTypographyComplete = () => {
@@ -152,6 +138,10 @@ export default function App() {
   const boxSize = 340;
   const borderColor = "#8fd6f9";
 
+  const whiteCyan = "linear-gradient(to bottom, #fff 54%, #8ee6ff 100%)";
+  const redBlueCyan = "linear-gradient(180deg, #6947AD 0%, #328AC9 50%, #73D9F0 100%)";
+
+
   if (!user) {
     return (
       <div style={{
@@ -182,19 +172,49 @@ export default function App() {
   
 
   return (
-    <div
+    <motion.div
       style={{
         minHeight: "100vh",
         width: "100vw",
         position: "relative",
         overflow: "hidden",
-        background: "linear-gradient(to bottom, #fff 54%, #8ee6ff 100%)",
         display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
       }}
     >
+      {/* Background crossfade layers */}
+      <motion.div
+        key="bg-white"
+        initial={{ opacity: 1 }}
+        animate={{ opacity: (phase === "border" || phase === "image") ? 0 : 1 }}
+        transition={{ duration: 2, ease: "easeInOut" }}
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          background: whiteCyan,
+          zIndex: -1,
+        }}
+      />
+      <motion.div
+        key="bg-colored"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: (phase === "border" || phase === "image") ? 1 : 0 }}
+        transition={{ duration: 2, ease: "easeInOut" }}
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          background: redBlueCyan,
+          zIndex: -1,
+        }}
+      />
       {/* Logout icon in top right */}
       <div
         style={{
@@ -214,7 +234,8 @@ export default function App() {
             border: "none",
             cursor: "pointer",
             fontSize: 36,
-            color: "#4a90e2",
+            color: (phase === "border" || phase === "image") ? "#ffffff" : "#4a90e2",
+            transition: "color 1s ease-in-out",
             padding: 0,
             margin: 0,
             display: "flex",
@@ -254,8 +275,8 @@ export default function App() {
             top: "40%",
             left: "50%",
             transform: "translate(-100%, -100%)",
-            width: 340,
-            height: 340,
+            width: 800,
+            height: 800,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -284,7 +305,7 @@ export default function App() {
           style={{
             position: "absolute",
             top: "40%",
-            left: "50%",
+            left: "47%",
             transform: "translate(-50%, -50%)",
             width: boxSize,
             height: boxSize,
@@ -293,7 +314,7 @@ export default function App() {
             justifyContent: "center",
             zIndex: 2,
             background: "transparent", // Ensure no background color
-    boxShadow: "none", // Remove any shadow
+            boxShadow: "none", // Remove any shadow
           }}
         >
           {/* Border animates in */}
@@ -304,7 +325,7 @@ export default function App() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 1.0, ease: "linear" }}
+                transition={{ type: "spring", stiffness: 80, damping: 12 }}
                 style={{
                   position: "absolute",
                   width: boxSize,
@@ -368,8 +389,7 @@ export default function App() {
                   <img
                     src={image}
                     alt="Preview"
-                    style={{ width: "100%", height: "100%", objectFit: "cover" ,objectFit: "cover", // Ensures the image fills the container and is cropped
-                      objectPosition: "center",}}
+                    style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center"}}
                   />
                 </motion.div>
               )}
@@ -384,19 +404,18 @@ export default function App() {
         className="icon-container"
         style={{
           position: "fixed",
-          left: "50%",
-          bottom: "15%", // Default position for larger screens
+          left: "53%",
+          bottom: "15%",
           transform: "translateX(-50%)",
           zIndex: 20,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          gap: iconSplit ? "80px" : "20px", // Adjust gap dynamically
-          transition: "gap 0.6s ease-out", // Smooth transition for the gap,
-          width: "100%"
+          gap: iconSplit ? "80px" : "20px",
+          transition: "gap 0.6s ease-out",
         }}
       >
-    <motion.div
+    <motion.div className="icon"
       initial={{ x: 0, opacity: 1 }}
       animate={iconSplit ? { x: -40, opacity: 1 } : { x: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
@@ -410,23 +429,17 @@ export default function App() {
         alignItems: "center",
         justifyContent: "center",
         boxShadow: "0 2px 8px rgba(50,80,120,0.10)",
-        // cursor: "pointer",
-        //padding: 0,          // Remove padding if any
-    // lineHeight: 0,
       }}
       onClick={handleIconClick}
     >
       <img
-        src="/images/icon image.png"
+        src="/images/icon.png "
         alt="icon"
-        style={{ width: 64, height: 64, display: "block", borderRadius: "0%", // Align vertically to middle
-          margin: 0,                // Remove margin
-          padding: 0,               // Remove padding
-          lineHeight: 0, }}         // Remove line height}}
+        style={{ width: 52, height: 52, display: "block", borderRadius: "0%", margin: 0, padding: 0, lineHeight: 0 }}
       />
     </motion.div>
 
-    <motion.div
+    <motion.div className="icon"
       initial={{ x: 0, opacity: 0 }}
       animate={iconSplit ? { x: 40, opacity: 1 } : { x: 0, opacity: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
@@ -463,13 +476,12 @@ export default function App() {
                 fileId={fileId}
               />
               <IconSplit
-            show={true}
+                show={true}
                 onDial={() => alert("Dial interface coming soon!")}
                 onLink={handleLink}
               />
             </>
           )}
-        </div>
+    </motion.div>
   );
 }
-
