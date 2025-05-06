@@ -12,9 +12,26 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
+/* Adjust icon size and position for smaller screens */
+@media (max-width: 768px) {
+  .icon-container {
+    bottom: 20%; /* Move the icon closer to the image box */
+    gap: 20px; /* Reduce the gap between icons */
+  }
+
+  .icon {
+    width: 40px; /* Reduce icon size */
+    height: 40px;
+    border-width: 2px; /* Adjust border thickness */
+  }
+
+  .icon img {
+    width: 32px; /* Adjust image size inside the icon */
+    height: 32px;
+  }
+}
 
 .App-header {
-  background-color: #282c34;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
