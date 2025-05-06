@@ -7,7 +7,7 @@ const MainUI = () => {
       style={{
         minHeight: "100vh",
         width: "100vw",
-        background: "linear-gradient(to bottom, #fff 54%, #8ee6ff 100%)",
+        background: "transparent",
         position: "relative",
         overflow: "hidden"
       }}
