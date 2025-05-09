@@ -440,7 +440,7 @@ export default function App() {
       />
     </motion.div>
 
-    <motion.div className="icon"
+    {/* <motion.div className="icon"
       initial={{ x: 0, opacity: 0 }}
       animate={iconSplit ? { x: 40, opacity: 1 } : { x: 0, opacity: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
@@ -463,11 +463,11 @@ export default function App() {
         alt="second icon"
         style={{ width: 32, height: 32, display: "block", borderRadius: "50%" }}
       />
-    </motion.div>
+    </motion.div> */}
   </div>
       )}
 
-      {phase === "image" && (
+      {/* {phase === "image" && (
             <>
               <MainUI
                 image={image}
@@ -482,7 +482,7 @@ export default function App() {
                 onLink={handleLink}
               />
             </>
-          )}
+          )} */}
     </motion.div>
   );
 }
