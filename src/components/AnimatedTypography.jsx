@@ -14,8 +14,8 @@ function AnimatedTypography({ onComplete }) {
   return (
     <motion.div 
       style={{
-        height: "60vh",
-        width: "60vw",
+        // height: "60vh",
+        // width: "60vw",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -32,11 +32,11 @@ function AnimatedTypography({ onComplete }) {
         style={{
           color: "#a17ee4",
           fontFamily: "'Montserrat', 'Arial', sans-serif",
-          fontWeight: 200,
-          fontSize: "clamp(2rem, 5vw, 5rem)",
+          fontWeight: 10,
+          fontSize: "clamp(1rem, 4vw, 4rem)",
           letterSpacing: "1px",
           textAlign: "center",
-          lineHeight: 1.2,
+          // lineHeight: 1.2,
           margin: 0,
           padding: 0,
         }}
