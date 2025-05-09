@@ -404,7 +404,7 @@ export default function App() {
         className="icon-container"
         style={{
           position: "fixed",
-          left: window.innerWidth >= 1024 ? "50%" : "55%",
+          left: window.innerWidth >= 1024 ? "50%" : "50%",
           // left: "53%",
           bottom: "15%",
           transform: "translateX(-50%)",
