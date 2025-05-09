@@ -32,11 +32,11 @@ function AnimatedTypography({ onComplete }) {
         style={{
           color: "#a17ee4",
           fontFamily: "'Montserrat', 'Arial', sans-serif",
-          fontWeight: 10,
-          fontSize: "clamp(1rem, 4vw, 4rem)",
+          fontWeight: "normal",
+          fontSize: "clamp(2rem, 5vw, 5rem)",
           letterSpacing: "1px",
           textAlign: "center",
-          // lineHeight: 1.2,
+          whiteSpace: "nowrap",
           margin: 0,
           padding: 0,
         }}
