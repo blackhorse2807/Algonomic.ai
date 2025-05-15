@@ -5,10 +5,22 @@ const path = require('path');
 const fs = require('fs');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-
+const https = require('https');
 const app = express();
+const { nanoid } = require('nanoid');
 const port = process.env.PORT || 5000;
+// const { createProxyMiddleware } = require("http-proxy-middleware");
 
+// app.use(
+//   "/api/v1/uploadFile",
+//   createProxyMiddleware({
+//     target: "http://34.192.150.36", // Insecure API endpoint
+//     changeOrigin: true,
+//     pathRewrite: {
+//       "^/api/v1/uploadFile": "/api/v1/uploadFile", // Keep the same path
+//     },
+//   })
+// );
 // Enable CORS for all routes
 app.use(cors());
 
@@ -26,8 +38,11 @@ const storage = multer.diskStorage({
     cb(null, uploadDir);
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
+    const uniqueId = nanoid(12); // You can change the length if needed
+    const ext = path.extname(file.originalname); // Keep original extension
+    cb(null, `${uniqueId}${ext}`);
   }
+  
 });
 
 const upload = multer({ 
@@ -72,7 +87,7 @@ app.post('/api/v1/uploadFile', upload.single('file'), (req, res) => {
     res.json(response);
 
     // Clean up the uploaded file after sending response
-    fs.unlinkSync(req.file.path);
+    // fs.unlinkSync(req.file.path);
     console.log('Temporary file cleaned up');
   } catch (error) {
     console.error('Error processing upload:', error);
@@ -142,13 +157,61 @@ app.use((err, req, res, next) => {
     details: err.message 
   });
 });
+const allowedOrigins = [
+  'https://algonomic-ai.vercel.app',
+  'http://localhost:300', // For local testing
+];
+
 app.use(cors({
-  origin: [
-    'https://algonomic-ai.vercel.app/', 
-    'http://localhost:3000' // For local testing
-  ],
-  credentials: true
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
 }));
+
+// New endpoint for generating image variations
+app.get('/api/v1/generate/:fileId', async (req, res) => {
+    try {
+        const { fileId } = req.params;
+        
+        // Here you would typically:
+        // 1. Retrieve the original image using fileId
+        // 2. Process it to create variations
+        // 3. Return the array of variations
+
+        // For now, we'll return a mock response structure
+        const variations = [];
+        
+        // Generate 49 variations with different brightness and contrast values
+        for (let b = 0.2; b <= 1.0; b += 0.2) {
+            for (let c = 0.2; c <= 1.0; c += 0.2) {
+                variations.push({
+                    fileName: `output_b${b.toFixed(2)}_c${c.toFixed(2)}.jpg`,
+                    settings: {
+                        b: parseFloat(b.toFixed(2)),
+                        c: parseFloat(c.toFixed(2))
+                    },
+                    imageData: `data:image/jpeg;base64,MOCK_IMAGE_DATA_${b.toFixed(2)}_${c.toFixed(2)}`
+                });
+            }
+        }
+
+        res.json({
+            success: true,
+            variations: variations
+        });
+    } catch (error) {
+        console.error('Error generating variations:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Failed to generate image variations'
+        });
+    }
+});
 
 // Start the server
 app.listen(port, () => {
